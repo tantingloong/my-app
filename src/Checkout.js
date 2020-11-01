@@ -13,7 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import AddressForm from './AddressForm';
 import Measurement from './Measurement';
 import Review from './Review';
+import DisplayMeasures from './FinalStep';
 import EcoIcon from '@material-ui/icons/Eco';
+import {MyProvider} from './MyContext'; // Context API
+
 
 function Copyright() {
   return (
@@ -67,6 +70,8 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Your Info', 'Your Measurement', 'Review & Check-in'];
 
+
+
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -84,6 +89,7 @@ export default function Checkout() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
+
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -92,64 +98,61 @@ export default function Checkout() {
     setActiveStep(activeStep - 1);
   };
 
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <AppBar position="absolute" color="default" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Joy Studio Nutrition
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main className={classes.layout}>
-        <Paper className={classes.paper}>
-          <Typography component="h1" variant="h4" align="center">
-            Check-in with Coach Felicia <EcoIcon color="primary" fontSize="large" />
-          </Typography>
-          <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          <React.Fragment>
-            {activeStep === steps.length ? (
-              <React.Fragment>
-                <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
-                </Typography>
-                <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order
-                  confirmation, and will send you an update when your order has
-                  shipped.
-                </Typography>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                {getStepContent(activeStep)}
-                <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                      Back
-                    </Button>
-                  )}
 
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                  </Button>
-                </div>
-              </React.Fragment>
-            )}
-          </React.Fragment>
-        </Paper>
-        <Copyright />
-      </main>
-    </React.Fragment>
+
+  return (
+    <MyProvider>
+      <React.Fragment>
+        <CssBaseline />
+        <AppBar position="absolute" color="default" className={classes.appBar}>
+          <Toolbar>
+            <Typography variant="h6" color="inherit" noWrap>
+              Joy Studio Nutrition
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <main className={classes.layout}>
+          <Paper className={classes.paper}>
+            <Typography component="h1" variant="h4" align="center">
+              Check-in with Coach Felicia <EcoIcon color="primary" fontSize="large" />
+            </Typography>
+            <Stepper activeStep={activeStep} className={classes.stepper}>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <React.Fragment>
+              {activeStep === steps.length ? (
+                <React.Fragment>
+                  <DisplayMeasures />
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  {getStepContent(activeStep)}
+                  <div className={classes.buttons}>
+                    {activeStep !== 0 && (
+                      <Button onClick={handleBack} className={classes.button}>
+                        Back
+                      </Button>
+                    )}
+
+                    <Button
+                      variant="contained"
+                      onClick={handleNext}
+                      className={classes.button}
+                    >
+                      {activeStep === steps.length - 1 ? 'Confirmed' : 'Next'}
+                    </Button>
+                  </div>
+                </React.Fragment>
+              )}
+            </React.Fragment>
+          </Paper>
+          <Copyright />
+        </main>
+      </React.Fragment>
+    </MyProvider>
   );
 }
