@@ -6,6 +6,7 @@ import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 //import FormControlLabel from '@material-ui/core/FormControlLabel';
 //import Checkbox from '@material-ui/core/Checkbox';
+import {MyContext} from './MyContext'; //Context API
 
 const AntSwitch = withStyles((theme) => ({
   root: {
@@ -42,127 +43,157 @@ const AntSwitch = withStyles((theme) => ({
 }))(Switch);
 
 export default function Measurement() {
+  const [measure, setMeasure] = React.useContext(MyContext); //Context API
+
+  const handleChange = event => {
+    const { name, value } = event.target;
+    console.log("got it - handleChange", name, value);
+
+    if (name === "isFemale") {
+      const { checked } = event.target;
+      setMeasure({
+        ...measure,
+        [name]: checked,
+      });
+    } else {
+      setMeasure({
+        ...measure,
+        [name]: value,
+      });
+    }
+    
+  };
+  
   const current = new Date();
   const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
   
-  const [state, setState] = React.useState({
-    checkedC: true,
-  });
-
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
-
-
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Today is {date}, key in your measurement
+         Hi {measure.firstName}, today is {date}, please key in your measurement 
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="weight"
+            name="weight"
             label="Weight"
             helperText="1st button from right | take 1st value"
             fullWidth
             type="number"
             autoComplete="weight"
+            defaultValue={measure.weight}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="fatPercent"
+            name="fatPercent"
             label="Fat %"
             helperText="1st button from right | wait for 2nd value"
             fullWidth
             type="number"
             autoComplete="fatPercent"
+            defaultValue={measure.fatPercent}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="viceralFat"
-            label="Voceral Fat"
+            name="viceralFat"
+            label="Viceral Fat"
             helperText="2nd button from right"
             fullWidth
             type="number"
             autoComplete="viceralFat"
+            defaultValue={measure.viceralFat}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="boneMass"
+            name="boneMass"
             label="Bone Mass"
             helperText="3rd button from right"
             fullWidth
             type="number"
             autoComplete="boneMass"
+            defaultValue={measure.boneMass}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="bmr"
+            name="bmr"
             label="BMR (in Cal)"
             helperText="4th button from right"
             fullWidth
             type="number"
             autoComplete="bmr"
+            defaultValue={measure.bmr}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="metabolicAge"
+            name="metabolicAge"
             label="Metabolic Age"
             helperText="3rd button from right"
             fullWidth
             type="number"
             autoComplete="metabolicAge"
+            defaultValue={measure.metabolicAge}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="muscleMass"
+            name="muscleMass"
             label="Muscle Mass"
             helperText="3rd button from right"
             fullWidth
             type="number"
             autoComplete="muscleMass"
+            defaultValue={measure.muscleMass}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="physiqueRating"
+            name="physiqueRating"
             label="Physique Rating"
             helperText="3rd button from right"
             fullWidth
             type="number"
             autoComplete="physiqueRating"
+            defaultValue={measure.physiqueRating}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="waterPercent"
+            name="waterPercent"
             label="Water %"
             helperText="3rd button from right"
             fullWidth
             type="number"
             autoComplete="waterPercent"
+            defaultValue={measure.waterPercent}
+            onChange={handleChange}
           />
         </Grid>
-        <Grid item xs={12} md={6} component="gender" container alignItems="center" spacing={1}>
+        <Grid item xs={12} md={6} name="gender" container alignItems="center" spacing={1}>
           <Grid item>Male</Grid>
           <Grid item>
-            <AntSwitch checked={state.checkedC} onChange={handleChange} name="checkedC" />
+            <AntSwitch checked={measure.isFemale} onChange={handleChange} name="isFemale" />
           </Grid>
           <Grid item>Female</Grid>
         </Grid>
